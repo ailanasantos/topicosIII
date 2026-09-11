@@ -1,41 +1,128 @@
 @model IEnumerable<ambiente_web.Models.Produto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Produtos";
 }
 
-<h1>Index</h1>
+<div class="mb-6">
+    <a asp-controller="Home" asp-action="Index" class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Voltar
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Preco)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Preco)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+    <div class="flex items-center space-x-3">
+        <svg class="w-10 h-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Produtos</h1>
+    </div>
+    <a asp-action="Create" class="mt-4 sm:mt-0 bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition flex items-center space-x-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <span>Novo Produto</span>
+    </a>
+</div>
+
+<div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-lg p-4 mb-6 border border-blue-100 dark:border-gray-600">
+    <p class="text-blue-800 dark:text-blue-200 text-center">
+        <span class="font-semibold">Gerencie seus produtos</span> - Adicione, edite e organize seu estoque de forma fácil e rápida!
+    </p>
+</div>
+
+<div class="mb-4">
+    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+        <div class="flex-1">
+            <input type="text" id="searchInput" placeholder="Buscar produto..."
+                   class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                   onkeyup="filterTable()">
+        </div>
+        <div>
+            <select id="sortSelect" onchange="sortTable()"
+                    class="w-full sm:w-auto border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                <option value="az">A → Z</option>
+                <option value="za">Z → A</option>
+                <option value="priceAsc">Preço: Menor → Maior</option>
+                <option value="priceDesc">Preço: Maior → Menor</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden transition-colors duration-300">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left" id="productsTable">
+            <thead class="bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+                <tr>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Nome</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Preço</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+                @foreach (var item in Model.OrderBy(p => p.Nome))
+                {
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 product-row transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-white product-name">@item.Nome</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-white product-price">@item.Preco</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right space-x-2">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300">Detalhes</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="noResults" class="hidden text-center py-8 text-gray-500 dark:text-gray-400">
+        Nenhum produto encontrado.
+    </div>
+</div>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('.product-row');
+        let hasResults = false;
+
+        rows.forEach(row => {
+            const name = row.querySelector('.product-name').textContent.toLowerCase();
+            if (name.includes(input)) {
+                row.style.display = '';
+                hasResults = true;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        document.getElementById('noResults').classList.toggle('hidden', hasResults);
+    }
+
+    function sortTable() {
+        const sort = document.getElementById('sortSelect').value;
+        const tbody = document.querySelector('#productsTable tbody');
+        const rows = Array.from(tbody.querySelectorAll('.product-row'));
+
+        rows.sort((a, b) => {
+            const nameA = a.querySelector('.product-name').textContent;
+            const nameB = b.querySelector('.product-name').textContent;
+            const priceA = parseFloat(a.querySelector('.product-price').textContent.replace(',', '.'));
+            const priceB = parseFloat(b.querySelector('.product-price').textContent.replace(',', '.'));
+
+            switch(sort) {
+                case 'az': return nameA.localeCompare(nameB);
+                case 'za': return nameB.localeCompare(nameA);
+                case 'priceAsc': return priceA - priceB;
+                case 'priceDesc': return priceB - priceA;
+                default: return 0;
+            }
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+    }
+</script>

@@ -1,31 +1,94 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Tailwind CSS complementar */
+* {
+    box-sizing: border-box;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
-  margin-bottom: 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+input:focus, select:focus, textarea:focus {
+    outline: none;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Transição suave para o tema */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar animations */
+.sidebar-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: white;
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+}
+
+.sidebar-item:hover::before {
+    transform: scaleY(1);
+}
+
+.sidebar-item:active {
+    transform: scale(0.98);
+}
+
+/* Sidebar text transition */
+.sidebar-text {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Smooth sidebar width transition */
+#sidebar {
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+/* Icon hover effect */
+.sidebar-item:hover svg {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Pulse animation for active item */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.sidebar-item.active {
+    animation: pulse 2s infinite;
+}
+
+/* Footer always at bottom */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#main-content main {
+    flex: 1;
+}
+
+#main-content footer {
+    margin-top: auto;
 }

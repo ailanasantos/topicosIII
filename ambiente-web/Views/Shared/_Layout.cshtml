@@ -1,54 +1,282 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" class="">
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ambiente_web</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sidebar: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ambiente_web.styles.css" asp-append-version="true" />
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ambiente_web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <aside id="sidebar" class="fixed left-0 top-0 h-full bg-gradient-to-b from-sidebar-600 to-sidebar-800 dark:from-gray-800 dark:to-gray-900 text-white shadow-xl z-50 transition-all duration-300 ease-in-out flex flex-col">
+        <div class="p-4 border-b border-sidebar-500 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white rounded-lg p-2">
+                        <svg class="w-8 h-8 text-sidebar-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <span class="sidebar-text text-xl font-bold opacity-100 transition-opacity duration-300">ambiente_web</span>
+                </div>
+                <button id="sidebar-close" class="text-white hover:bg-white/20 p-1 rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+                    </svg>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Produtos" asp-action="Index">Produtos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a asp-controller="Home" asp-action="Index" class="sidebar-item group flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-700 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg group-hover:bg-white/30 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <span class="sidebar-text font-medium opacity-100 transition-opacity duration-300">Home</span>
+            </a>
+
+            <a asp-controller="Produtos" asp-action="Index" class="sidebar-item group flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-700 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg group-hover:bg-white/30 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                </div>
+                <span class="sidebar-text font-medium opacity-100 transition-opacity duration-300">Produtos</span>
+            </a>
+
+            <a asp-controller="Produtos" asp-action="Create" class="sidebar-item group flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-700 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg group-hover:bg-white/30 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <span class="sidebar-text font-medium opacity-100 transition-opacity duration-300">Novo Produto</span>
+            </a>
+
+            <div class="border-t border-white/20 dark:border-gray-600 my-4"></div>
+
+            <a asp-controller="Home" asp-action="Privacy" class="sidebar-item group flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-700 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg group-hover:bg-white/30 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <span class="sidebar-text font-medium opacity-100 transition-opacity duration-300">Privacidade</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-white/20 dark:border-gray-700">
+            <button id="theme-toggle-sidebar" class="sidebar-item group flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-700 transition-all duration-200 w-full">
+                <div class="bg-white/20 p-2 rounded-lg group-hover:bg-white/30 transition">
+                    <svg id="sun-icon-sidebar" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg id="moon-icon-sidebar" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </div>
+                <span class="sidebar-text font-medium opacity-100 transition-opacity duration-300">Alternar Tema</span>
+            </button>
+        </div>
+    </aside>
+
+    <div id="main-content" class="ml-64 transition-all duration-300 min-h-screen flex flex-col">
+        <header class="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-300">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
+                        @ViewData["Title"]
+                    </h1>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+        </header>
+
+        <main class="container mx-auto px-4 py-8 flex-grow">
             @RenderBody()
         </main>
+
+        <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 text-center py-4 transition-colors duration-300 mt-auto">
+            <div class="container mx-auto px-4">
+                <p class="text-gray-600 dark:text-gray-400">&copy; 2026 - ambiente_web - <a asp-controller="Home" asp-action="Privacy" class="underline hover:text-blue-500 dark:hover:text-blue-400">Privacy</a></p>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ambiente_web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+    <div id="mobile-sidebar" class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-sidebar-600 to-sidebar-800 dark:from-gray-800 dark:to-gray-900 text-white shadow-xl z-50 transform -translate-x-full transition-transform duration-300 lg:hidden">
+        <div class="p-4 border-b border-sidebar-500 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white rounded-lg p-2">
+                        <svg class="w-8 h-8 text-sidebar-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold">ambiente_web</span>
+                </div>
+                <button id="close-mobile-menu" class="text-white hover:text-gray-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+        <nav class="p-4 space-y-2">
+            <a asp-controller="Home" asp-action="Index" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <span class="font-medium">Home</span>
+            </a>
+
+            <a asp-controller="Produtos" asp-action="Index" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                </div>
+                <span class="font-medium">Produtos</span>
+            </a>
+
+            <a asp-controller="Produtos" asp-action="Create" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <span class="font-medium">Novo Produto</span>
+            </a>
+
+            <div class="border-t border-white/20 my-4"></div>
+
+            <a asp-controller="Home" asp-action="Privacy" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 transition-all duration-200">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <span class="font-medium">Privacidade</span>
+            </a>
+
+            <button id="theme-toggle-mobile" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/20 transition-all duration-200 w-full">
+                <div class="bg-white/20 p-2 rounded-lg">
+                    <svg id="sun-icon-mobile" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <svg id="moon-icon-mobile" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </div>
+                <span class="font-medium">Alternar Tema</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const mainContent = document.getElementById('main-content');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
+        const html = document.documentElement;
+
+        let isSidebarVisible = localStorage.getItem('sidebarVisible') !== 'false';
+
+        function updateSidebar() {
+            if (window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+                mainContent.classList.remove('ml-64');
+            } else {
+                if (isSidebarVisible) {
+                    sidebar.classList.remove('-translate-x-full');
+                    mainContent.classList.add('ml-64');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    mainContent.classList.remove('ml-64');
+                }
+            }
+        }
+
+        sidebarToggle.addEventListener('click', () => {
+            isSidebarVisible = !isSidebarVisible;
+            localStorage.setItem('sidebarVisible', isSidebarVisible);
+            updateSidebar();
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            isSidebarVisible = false;
+            localStorage.setItem('sidebarVisible', false);
+            updateSidebar();
+        });
+
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', () => {
+            mobileSidebar.classList.remove('-translate-x-full');
+            mobileOverlay.classList.remove('hidden');
+        });
+
+        closeMobileMenu.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+        });
+
+        function toggleTheme() {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        document.getElementById('theme-toggle-sidebar').addEventListener('click', toggleTheme);
+        document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
+
+        window.addEventListener('resize', updateSidebar);
+        updateSidebar();
+    </script>
 </body>
 </html>
