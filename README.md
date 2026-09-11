@@ -33,8 +33,7 @@ cd topicosIII/ambiente-web
 2. Configure a string de conexão em `appsettings.json`:
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TopicosWebDb;User Id=sa;Password=<sua-senha>;TrustServerCertificate=True;"
+  
   }
 }
 ```
