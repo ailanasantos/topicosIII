@@ -1,0 +1,186 @@
+@model ambiente_web.Models.Venda
+@{
+    ViewData["Title"] = "Ponto de Venda";
+    var produtos = ViewBag.Produtos as List<ambiente_web.Models.Produto>;
+    var clientes = ViewBag.Clientes as List<ambiente_web.Models.Cliente>;
+}
+
+@Html.AntiForgeryToken()
+
+<a asp-action="Index" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-4">
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    Voltar
+</a>
+
+<h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Ponto de Venda</h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Buscar Produto</h2>
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="buscaProduto" placeholder="Digite o nome do produto..." class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                <select id="produtoSelect" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="">Selecione um produto</option>
+                    @foreach (var p in produtos)
+                    {
+                        <option value="@p.Id" data-preco="@p.Preco" data-estoque="@p.Estoque" data-nome="@p.Nome">@p.Nome - R$ @p.Preco.ToString("F2") (Estoque: @p.Estoque)</option>
+                    }
+                </select>
+            </div>
+            <div class="flex gap-2 mb-4">
+                <input type="number" id="quantidade" value="1" min="1" class="w-24 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                <button onclick="adicionarItem()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Adicionar</button>
+            </div>
+
+            <h3 class="text-md font-semibold text-gray-800 dark:text-white mb-2">Itens da Venda</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left" id="itensTable">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Produto</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Qtd</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Preço</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Subtotal</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Resumo</h2>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cliente (opcional)</label>
+                <select id="clienteId" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="">Consumidor Final</option>
+                    @foreach (var c in clientes)
+                    {
+                        <option value="@c.Id">@c.Nome</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Forma de Pagamento</label>
+                <select id="formaPagamento" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="PIX">PIX</option>
+                </select>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-4">
+                <div class="flex justify-between text-lg font-bold text-gray-800 dark:text-white">
+                    <span>Total:</span>
+                    <span id="totalVenda">R$ 0,00</span>
+                </div>
+            </div>
+            <button onclick="finalizarVenda()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold text-lg">Finalizar Venda</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var itens = [];
+
+    function adicionarItem() {
+        var select = document.getElementById('produtoSelect');
+        var opt = select.options[select.selectedIndex];
+        if (!opt.value) { alert('Selecione um produto'); return; }
+
+        var qtd = parseInt(document.getElementById('quantidade').value);
+        var estoque = parseInt(opt.dataset.estoque);
+        if (qtd > estoque) { alert('Estoque insuficiente!'); return; }
+
+        var id = parseInt(opt.value);
+        var nome = opt.dataset.nome;
+        var preco = parseFloat(opt.dataset.preco);
+
+        var existente = itens.find(i => i.produtoId === id);
+        if (existente) {
+            if (existente.quantidade + qtd > estoque) { alert('Estoque insuficiente!'); return; }
+            existente.quantidade += qtd;
+        } else {
+            itens.push({ produtoId: id, nome: nome, preco: preco, quantidade: qtd });
+        }
+
+        renderizarItens();
+    }
+
+    function removerItem(index) {
+        itens.splice(index, 1);
+        renderizarItens();
+    }
+
+    function renderizarItens() {
+        var tbody = document.querySelector('#itensTable tbody');
+        tbody.innerHTML = '';
+        var total = 0;
+        itens.forEach(function(item, i) {
+            var subtotal = item.preco * item.quantidade;
+            total += subtotal;
+            tbody.innerHTML += '<tr class="hover:bg-gray-50 dark:hover:bg-gray-700">' +
+                '<td class="px-4 py-2 text-gray-800 dark:text-white">' + item.nome + '</td>' +
+                '<td class="px-4 py-2 text-gray-600 dark:text-gray-300">' + item.quantidade + '</td>' +
+                '<td class="px-4 py-2 text-gray-600 dark:text-gray-300">R$ ' + item.preco.toFixed(2) + '</td>' +
+                '<td class="px-4 py-2 text-gray-800 dark:text-white">R$ ' + subtotal.toFixed(2) + '</td>' +
+                '<td class="px-4 py-2"><button onclick="removerItem(' + i + ')" class="text-red-600 hover:text-red-900">X</button></td>' +
+                '</tr>';
+        });
+        document.getElementById('totalVenda').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    }
+
+    function finalizarVenda() {
+        if (itens.length === 0) { alert('Adicione itens à venda!'); return; }
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/Vendas/FinalizarVenda';
+
+        var token = document.querySelector('input[name="__RequestVerificationToken"]');
+        if (token) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = '__RequestVerificationToken';
+            input.value = token.value;
+            form.appendChild(input);
+        }
+
+        var clienteId = document.getElementById('clienteId').value;
+        var inputCliente = document.createElement('input');
+        inputCliente.type = 'hidden';
+        inputCliente.name = 'clienteId';
+        inputCliente.value = clienteId;
+        form.appendChild(inputCliente);
+
+        var forma = document.getElementById('formaPagamento').value;
+        var inputForma = document.createElement('input');
+        inputForma.type = 'hidden';
+        inputForma.name = 'formaPagamento';
+        inputForma.value = forma;
+        form.appendChild(inputForma);
+
+        var inputItens = document.createElement('input');
+        inputItens.type = 'hidden';
+        inputItens.name = 'itensJson';
+        inputItens.value = JSON.stringify(itens.map(i => ({ ProdutoId: i.produtoId, Quantidade: i.quantidade })));
+        form.appendChild(inputItens);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    document.getElementById('buscaProduto').addEventListener('keyup', function() {
+        var filter = this.value.toLowerCase();
+        var select = document.getElementById('produtoSelect');
+        for (var i = 1; i < select.options.length; i++) {
+            var opt = select.options[i];
+            opt.style.display = opt.text.toLowerCase().includes(filter) ? '' : 'none';
+        }
+    });
+</script>

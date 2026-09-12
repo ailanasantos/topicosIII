@@ -1,29 +1,27 @@
-@model IEnumerable<ambiente_web.Models.Produto>
+@model IEnumerable<ambiente_web.Models.Categoria>
 @{
-    ViewData["Title"] = "Produtos";
+    ViewData["Title"] = "Categorias";
 }
 
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Produtos</h1>
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Categorias</h1>
     <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        Novo Produto
+        Nova Categoria
     </a>
 </div>
 
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-        <input type="text" id="searchInput" placeholder="Buscar produtos..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+        <input type="text" id="searchInput" placeholder="Buscar categorias..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
     </div>
     <div class="overflow-x-auto">
-        <table class="w-full text-left" id="produtosTable">
+        <table class="w-full text-left" id="categoriasTable">
             <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" onclick="sortTable(0)">Nome</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Categoria</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Preço</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estoque</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Descrição</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Produtos</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider text-right">Ações</th>
                 </tr>
             </thead>
@@ -32,28 +30,8 @@
                 {
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-800 dark:text-white font-medium">@item.Nome</td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">@(item.Categoria?.Nome ?? "-")</td>
-                        <td class="px-6 py-4 text-gray-800 dark:text-white font-medium">@item.Preco.ToString("C")</td>
-                        <td class="px-6 py-4">
-                            @if (item.Estoque <= item.EstoqueMinimo)
-                            {
-                                <span class="text-red-600 dark:text-red-400 font-medium">@item.Estoque</span>
-                            }
-                            else
-                            {
-                                <span class="text-gray-800 dark:text-white">@item.Estoque</span>
-                            }
-                        </td>
-                        <td class="px-6 py-4">
-                            @if (item.Ativo)
-                            {
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Ativo</span>
-                            }
-                            else
-                            {
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Inativo</span>
-                            }
-                        </td>
+                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">@(item.Descricao ?? "-")</td>
+                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">@item.Produtos.Count</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">Editar</a>
                             <a asp-action="Details" asp-route-id="@item.Id" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 mr-3">Detalhes</a>
@@ -66,14 +44,14 @@
     </div>
     @if (!Model.Any())
     {
-        <div class="p-8 text-center text-gray-500 dark:text-gray-400">Nenhum produto encontrado.</div>
+        <div class="p-8 text-center text-gray-500 dark:text-gray-400">Nenhuma categoria encontrada.</div>
     }
 </div>
 
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function() {
         var filter = this.value.toLowerCase();
-        var rows = document.querySelectorAll('#produtosTable tbody tr');
+        var rows = document.querySelectorAll('#categoriasTable tbody tr');
         rows.forEach(function(row) {
             var text = row.textContent.toLowerCase();
             row.style.display = text.includes(filter) ? '' : 'none';
@@ -81,7 +59,7 @@
     });
 
     function sortTable(colIndex) {
-        var table = document.getElementById('produtosTable');
+        var table = document.getElementById('categoriasTable');
         var rows = Array.from(table.querySelectorAll('tbody tr'));
         var sorted = rows.sort(function(a, b) {
             var aText = a.cells[colIndex].textContent.toLowerCase();

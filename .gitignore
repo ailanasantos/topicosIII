@@ -40,17 +40,22 @@ project.nuget.cache
 ## Publish output
 **/[Pp]ublish/
 
-## Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-## macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-## dotenv files
+## NUNCA subir (contém senhas e config locais)
+appsettings.Development.json
+appsettings.*.json
 .env
 .env.local
 .env.*.local
+
+## User secrets (para connection strings com senha)
+**/Properties/serviceDependencies.json
+
+## OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+## IDE
+.vscode/
+*.code-workspace

@@ -1,0 +1,64 @@
+@model ambiente_web.Models.Venda
+@{
+    ViewData["Title"] = "Detalhes da Venda";
+}
+
+<a asp-action="Index" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-4">
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    Voltar
+</a>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-2xl">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Venda #@Model.Id</h1>
+
+    <div class="grid grid-cols-2 gap-4 mb-6">
+        <div>
+            <span class="text-sm text-gray-500 dark:text-gray-400">Data:</span>
+            <p class="text-gray-800 dark:text-white">@Model.DataVenda.ToString("dd/MM/yyyy HH:mm")</p>
+        </div>
+        <div>
+            <span class="text-sm text-gray-500 dark:text-gray-400">Cliente:</span>
+            <p class="text-gray-800 dark:text-white">@(Model.Cliente?.Nome ?? "Consumidor Final")</p>
+        </div>
+        <div>
+            <span class="text-sm text-gray-500 dark:text-gray-400">Pagamento:</span>
+            <p class="text-gray-800 dark:text-white">@Model.FormaPagamento</p>
+        </div>
+        <div>
+            <span class="text-sm text-gray-500 dark:text-gray-400">Status:</span>
+            <p class="text-gray-800 dark:text-white">@Model.Status</p>
+        </div>
+    </div>
+
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Itens</h2>
+    <div class="overflow-x-auto mb-6">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Produto</th>
+                    <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Qtd</th>
+                    <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Preço</th>
+                    <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var item in Model.Itens)
+                {
+                    <tr>
+                        <td class="px-4 py-2 text-gray-800 dark:text-white">@item.Produto.Nome</td>
+                        <td class="px-4 py-2 text-gray-600 dark:text-gray-300">@item.Quantidade</td>
+                        <td class="px-4 py-2 text-gray-600 dark:text-gray-300">@item.PrecoUnitario.ToString("C")</td>
+                        <td class="px-4 py-2 text-gray-800 dark:text-white font-medium">@item.Subtotal.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+        <div class="flex justify-between text-xl font-bold text-gray-800 dark:text-white">
+            <span>Total:</span>
+            <span>@Model.Total.ToString("C")</span>
+        </div>
+    </div>
+</div>

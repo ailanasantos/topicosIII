@@ -1,0 +1,81 @@
+@{
+    ViewData["Title"] = "Relatórios";
+}
+
+<h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Relatórios</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Vendas Hoje</div>
+        <div class="text-2xl font-bold text-gray-800 dark:text-white">@ViewBag.VendasHoje</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Hoje</div>
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400">@(((decimal)ViewBag.TotalHoje).ToString("C"))</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Vendas no Mês</div>
+        <div class="text-2xl font-bold text-gray-800 dark:text-white">@ViewBag.VendasMes</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Total no Mês</div>
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400">@(((decimal)ViewBag.TotalMes).ToString("C"))</div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Produtos</div>
+        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">@ViewBag.TotalProdutos</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Estoque Baixo</div>
+        <div class="text-2xl font-bold text-red-600 dark:text-red-400">@ViewBag.ProdutosEstoqueBaixo</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Clientes</div>
+        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">@ViewBag.TotalClientes</div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Vendas Recentes</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">#</th>
+                        <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Data</th>
+                        <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Cliente</th>
+                        <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-300">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach (ambiente_web.Models.Venda v in ViewBag.VendasRecentes)
+                    {
+                        <tr>
+                            <td class="px-4 py-2 text-gray-800 dark:text-white">@v.Id</td>
+                            <td class="px-4 py-2 text-gray-600 dark:text-gray-300">@v.DataVenda.ToString("dd/MM HH:mm")</td>
+                            <td class="px-4 py-2 text-gray-600 dark:text-gray-300">@(v.Cliente?.Nome ?? "Final")</td>
+                            <td class="px-4 py-2 text-gray-800 dark:text-white font-medium">@v.Total.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Produtos Mais Vendidos</h2>
+        <div class="space-y-3">
+            @foreach (dynamic item in ViewBag.ProdutosMaisVendidos)
+            {
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-800 dark:text-white">@item.Nome</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">@item.Quantidade un.</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,38 +1,41 @@
 @model ambiente_web.Models.Produto
-
 @{
     ViewData["Title"] = "Detalhes do Produto";
 }
 
-<div class="mb-6">
-    <a asp-action="Index" class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        Voltar
-    </a>
-</div>
+<a asp-action="Index" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-4">
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    Voltar
+</a>
 
-<h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Detalhes do Produto</h1>
-
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-md transition-colors duration-300">
-    <dl class="space-y-4">
-        <div>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nome</dt>
-            <dd class="text-lg text-gray-800 dark:text-white">@Html.DisplayFor(model => model.Nome)</dd>
-        </div>
-        <div>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Preço</dt>
-            <dd class="text-lg text-gray-800 dark:text-white">@Html.DisplayFor(model => model.Preco)</dd>
-        </div>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-lg">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Detalhes do Produto</h1>
+    <dl class="space-y-3">
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nome</dt>
+        <dd class="text-gray-800 dark:text-white">@Model.Nome</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Descrição</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Descricao ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Categoria</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Categoria?.Nome ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Preço</dt>
+        <dd class="text-gray-800 dark:text-white font-medium">@Model.Preco.ToString("C")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Estoque</dt>
+        <dd class="text-gray-800 dark:text-white">@Model.Estoque (mín: @Model.EstoqueMinimo)</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Código de Barras</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.CodigoBarras ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+        <dd>
+            @if (Model.Ativo)
+            {
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Ativo</span>
+            }
+            else
+            {
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Inativo</span>
+            }
+        </dd>
     </dl>
-
-    <div class="flex space-x-4 mt-6">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition">
-            Editar
-        </a>
-        <a asp-action="Index" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-2 transition">
-            Voltar
-        </a>
+    <div class="mt-6">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Editar</a>
     </div>
 </div>

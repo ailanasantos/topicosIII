@@ -1,6 +1,6 @@
-@model ambiente_web.Models.Produto
+@model ambiente_web.Models.Categoria
 @{
-    ViewData["Title"] = "Excluir Produto";
+    ViewData["Title"] = "Excluir Categoria";
 }
 
 <a asp-action="Index" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-4">
@@ -9,15 +9,13 @@
 </a>
 
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-lg">
-    <h1 class="text-xl font-bold text-red-600 dark:text-red-400 mb-4">Excluir Produto</h1>
-    <p class="text-gray-600 dark:text-gray-300 mb-4">Tem certeza que deseja excluir este produto?</p>
+    <h1 class="text-xl font-bold text-red-600 dark:text-red-400 mb-4">Excluir Categoria</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-4">Tem certeza que deseja excluir esta categoria?</p>
     <dl class="space-y-3 mb-6">
         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nome</dt>
         <dd class="text-gray-800 dark:text-white">@Model.Nome</dd>
-        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Preço</dt>
-        <dd class="text-gray-800 dark:text-white">@Model.Preco.ToString("C")</dd>
-        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Estoque</dt>
-        <dd class="text-gray-800 dark:text-white">@Model.Estoque</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Descrição</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Descricao ?? "-")</dd>
     </dl>
     <form asp-action="Delete">
         @Html.AntiForgeryToken()

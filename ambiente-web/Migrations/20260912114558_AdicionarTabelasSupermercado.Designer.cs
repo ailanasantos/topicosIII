@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ambiente_web.Data;
 
@@ -11,9 +12,11 @@ using ambiente_web.Data;
 namespace ambiente_web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912114558_AdicionarTabelasSupermercado")]
+    partial class AdicionarTabelasSupermercado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,38 +44,6 @@ namespace ambiente_web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descricao = "Sucos, refrigerantes, águas",
-                            Nome = "Bebidas"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Descricao = "Leite, queijo, manteiga",
-                            Nome = "Laticínios"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Descricao = "Pães, bolos, biscoitos",
-                            Nome = "Padaria"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Descricao = "Frutas e verduras",
-                            Nome = "Hortifruti"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Descricao = "Carnes bovinas, suínas, aves",
-                            Nome = "Carnes"
-                        });
                 });
 
             modelBuilder.Entity("ambiente_web.Models.Cliente", b =>

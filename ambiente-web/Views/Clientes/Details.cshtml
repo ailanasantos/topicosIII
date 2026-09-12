@@ -1,0 +1,28 @@
+@model ambiente_web.Models.Cliente
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+
+<a asp-action="Index" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 mb-4">
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    Voltar
+</a>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-lg">
+    <h1 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Detalhes do Cliente</h1>
+    <dl class="space-y-3">
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nome</dt>
+        <dd class="text-gray-800 dark:text-white">@Model.Nome</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">CPF</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.CPF ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Telefone</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Telefone ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">E-mail</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Email ?? "-")</dd>
+        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Endereço</dt>
+        <dd class="text-gray-800 dark:text-white">@(Model.Endereco ?? "-")</dd>
+    </dl>
+    <div class="mt-6">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Editar</a>
+    </div>
+</div>
